@@ -43,7 +43,7 @@ function LoginForm({ isLoggedIn, setIsLoggedIn }){
 
   
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '18rem' }} className='center-box'>
                 {isLoggedIn ? (
                 <Card.Text>You are logged in!</Card.Text>
                 ) : (

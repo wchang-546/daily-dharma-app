@@ -6,7 +6,7 @@ function CalendarApp() {
     const [value, setValue] = useState(new Date());
  
     return (
-        <div>
+        <div className='center-box'>
             <Calendar
                 onChange={setValue}
                 value={value}

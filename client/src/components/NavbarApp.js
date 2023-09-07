@@ -1,4 +1,4 @@
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -17,7 +17,7 @@ function NavbarApp({ isLoggedIn }){
                     <NavLink to='/calendar'> Calendar </NavLink> 
                     <NavLink to="/meditate"> Meditate </NavLink> 
                     {isLoggedIn ? <NavLink to='/account'> Manage Account </NavLink> : null}
-                    {isLoggedIn ? <Button onClick={logout} variant='secondary'> Logout </Button> : <Button variant='primary' href='/login'> Login/Register </Button>}
+                    {isLoggedIn ? <Button onClick={logout} variant='secondary'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}
                 </Container>
             </Navbar>
         </header>

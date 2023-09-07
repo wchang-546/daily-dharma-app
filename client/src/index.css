@@ -3,5 +3,14 @@
   --header: #fff;
   --link: #61dafb;
   --text: hsla(0, 0%, 100%, 0.88);
+  background-image: url('components/images/bamboo.jpg');
+  background-size: cover;
 }
 
+
+.center-box { 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

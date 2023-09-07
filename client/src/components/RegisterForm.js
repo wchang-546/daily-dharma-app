@@ -44,7 +44,7 @@ function RegisterForm({ }){
 
   
     return (
-        <Card style={{ width: '20rem' }}>
+        <Card style={{ width: '20rem' }} className='center-box'>
                 {isRegistered ? (
                 <Card.Text>User registration successful. <NavLink to='/login'> Sign in here </NavLink> </Card.Text>
                 ) : (
