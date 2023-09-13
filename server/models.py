@@ -13,9 +13,10 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique=True, nullable=False)
     _password_hash = db.Column(db.String) 
     
-    calender_entries = db.relationship('CalendarEntry', backref='user') 
-    journal_entries = db.relationship('JournalEntry', backref='user')
-
+    calender_entries = db.relationship('CalendarEntry', cascade='all, delete-orphan', backref='user') 
+    journal_entries = db.relationship('JournalEntry', cascade='all, delete-orphan', backref='user')
+    serialize_rules = ('-calender_entries.user', '-journal_entries.user',)
+    
     @hybrid_property
     def password_hash(self):
         raise AttributeError('Password hashes cannot be viewed.')
@@ -37,22 +38,28 @@ class CalendarEntry(db.Model, SerializerMixin):
     __tablename__ = 'calendar_entries'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user_id'))
     mood = db.Column(db.String) 
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # users = db.relationship('User')
+
     created_date = db.Column(db.DateTime, server_default=db.func.now())
-    updated_date = db.Column(db.DateTime, on_update=db.func.now())
+    updated_date = db.Column(db.DateTime, onupdate=db.func.now())
 
 class JournalEntry(db.Model, SerializerMixin):
     __tablename__ = 'journal_entries'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user_id'))
-    entry = db.Column(db.String)
-    #Make sure prompt is included in the POST request 
+    journal_entry = db.Column(db.String)
+    #Make sure prompt gets included in the POST request 
     prompt = db.Column(db.String)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    # users = db.relationship('User', back_populates='journal_entries')
+
    
     created_date = db.Column(db.DateTime, server_default=db.func.now())
-    updated_date = db.Column(db.DateTime, on_update=db.func.now())
+    updated_date = db.Column(db.DateTime, onupdate=db.func.now())
 
 class CareerJournalPrompt(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)

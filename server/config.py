@@ -16,6 +16,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
+
 #Secret key for API session
 app.secret_key = b'\x1e\xc6\xe8\n\xf1.UHo\x9f\x0cz\xc5\xf6\x9a+'
 
