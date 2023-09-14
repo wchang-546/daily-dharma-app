@@ -16,8 +16,8 @@ class User(db.Model, SerializerMixin):
     calender_entries = db.relationship('CalendarEntry', cascade='all, delete-orphan', backref='user') 
     journal_entries = db.relationship('JournalEntry', back_populates='user')
 
-    serialize_rules = ('-calender_entries', '-journal_entries', '-journal_entries.journal_prompts')    
-    
+    serialize_rules = ('-calender_entries.users', '-journal_entries.users', '-journal_entries.journal_prompts')    
+
     @hybrid_property
     def password_hash(self):
         raise AttributeError('Password hashes cannot be viewed.')
@@ -42,7 +42,7 @@ class CalendarEntry(db.Model, SerializerMixin):
     mood = db.Column(db.String) 
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
+    
     created_date = db.Column(db.DateTime, server_default=db.func.now())
     updated_date = db.Column(db.DateTime, onupdate=db.func.now())
 
@@ -56,7 +56,7 @@ class JournalEntry(db.Model, SerializerMixin):
     prompt_id = db.Column(db.Integer, db.ForeignKey('journal_prompts.id'))
 
     user = db.relationship('User', back_populates='journal_entries')
-    journal_prompts = db.relationship('JournalPrompt', back_populates='journal_entries')
+    journal_prompt = db.relationship('JournalPrompt', back_populates='journal_entries')
 
     created_date = db.Column(db.DateTime, server_default=db.func.now())
     updated_date = db.Column(db.DateTime, onupdate=db.func.now())
@@ -67,4 +67,4 @@ class JournalPrompt(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String) 
     
-    journal_entries = db.relationship('JournalEntry', back_populates='journal_prompts') 
+    journal_entries = db.relationship('JournalEntry', back_populates='journal_prompt') 
