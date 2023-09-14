@@ -34,10 +34,10 @@ class Logout(Resource):
 
 class JournalPrompts(Resource):
     def get(self): 
-        prompts = [prompt.to_dict() for prompt in JournalPrompt.query.all()]
+        prompts = [prompt.to_dict(rules=('-journal_entries',)) for prompt in JournalPrompt.query.all()]
         return make_response(prompts, 200)
 
-api.add_resource(JournalPrompts, '/relationship_prompts')
+api.add_resource(JournalPrompts, '/prompts')
 api.add_resource(Users, '/users')
 api.add_resource(Logout, '/logout')
 
