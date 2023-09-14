@@ -14,7 +14,7 @@ function NavbarApp({ isLoggedIn }){
             <Navbar bg="dark" variant='dark'>
                 <Container>
                     <NavLink to='/journal'> Journal </NavLink>
-                    <NavLink to='/calendar'> Calendar </NavLink> 
+                    <NavLink to='/mood'> Mood Tracking </NavLink> 
                     <NavLink to="/meditate"> Meditate </NavLink> 
                     {isLoggedIn ? <NavLink to='/account'> Manage Account </NavLink> : null}
                     {isLoggedIn ? <Button onClick={logout} variant='secondary'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}

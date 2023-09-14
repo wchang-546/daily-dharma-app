@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Routes, Route } from "react-router-dom";
 import CalendarApp from "./CalendarApp";
 import NavbarApp from "./NavbarApp"
@@ -18,10 +18,10 @@ function App() {
     <Routes>
       <Route exact path='/' element={<LoginForm />}/> 
       <Route exact path='/journal'element={<JournalApp />}/> 
-      <Route exact path='/calendar' element={<CalendarApp />}/> 
+      <Route exact path='/mood' element={<CalendarApp />}/> 
       <Route exact path='/meditate' element={<MeditationApp />}/>
       <Route exact path='/account' element={<ManageAccount />}/>  
-      <Route exact path='/login' element={<LoginForm />}/>  
+      <Route exact path='/login' element={<LoginForm isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>  
       <Route exact path='/register/' element={<RegisterForm />}/>
     </Routes>
   </div>
