@@ -9,7 +9,7 @@ import datetime
 
 # Local imports
 from app import app
-from models import db, User, CalendarEntry, JournalEntry, CareerJournalPrompt, SelfGrowthJournalPrompt, RelationshipJournalPrompt
+from models import db, User, CalendarEntry, JournalEntry, JournalPrompt 
 
 def create_users(): 
     users = []
@@ -84,23 +84,13 @@ def create_journal_entries():
     return journal_entries
 
 def create_journal_prompts():
-    all_prompts = []
-    career_prompts = ["What purpose would you like in your work?", "What boundaries do you need to set with you work?", "What qualities do you need in a leader?", "What is something you'd like to learn more about?", "Who do you admire most? Why?", "What does success mean to you?", "What are your top three priorities in work right now?"]
-    for item in career_prompts:
-        i = CareerJournalPrompt(prompt = item)
-        all_prompts.append(i)
+    seed_prompts = []
+    prompts = ["What purpose would you like in your work?", "What boundaries do you need to set with you work?", "How do you communicate love?", "What are three green flags you look for in people?", "What are actions someone can do to make me feel seen?", "What is something that inspired you recently?", "Where do you look for joy?", "What are you grateful for in this moment?", "When did you feel the happiest in your life? Why?", "What was important to you 5 years ago that no longer is? How come? What changed?", "What are dealbreakers in a friendship?", "What are dealbreakers in a relationship?", "Who do I rely on most for support? Why?", "What qualities do you need in a leader?", "What is something you'd like to learn more about?", "Who do you admire most? Why?", "What does success mean to you?", "What are your top three priorities in work right now?"]
+    for item in prompts:
+        i = JournalPrompt(prompt = item)
+        seed_prompts.append(i)
 
-    relationship_prompts = ["How do you communicate love?", "What are three green flags you look for in people?", "What are actions someone can do to make me feel seen?", "What are dealbreakers in a friendship?", "What are dealbreakers in a relationship?", "Who do I rely on most for support? Why?"]
-    for item in relationship_prompts: 
-        i = RelationshipJournalPrompt(prompt = item)
-        all_prompts.append(i)
-
-    self_prompts = ["What is something that inspired you recently?", "Where do you look for joy?", "What are you grateful for in this moment?", "When did you feel the happiest in your life? Why?", "What was important to you 5 years ago that no longer is? How come? What changed?"]
-    for item in self_prompts: 
-        i = SelfGrowthJournalPrompt(prompt = item)
-        all_prompts.append(i)
-
-    return all_prompts
+    return seed_prompts
 
 
 if __name__ == '__main__':
@@ -113,10 +103,7 @@ if __name__ == '__main__':
         User.query.delete()
         CalendarEntry.query.delete()
         JournalEntry.query.delete()
-        CareerJournalPrompt.query.delete()
-        RelationshipJournalPrompt.query.delete()
-        SelfGrowthJournalPrompt.query.delete()
-
+        JournalPrompt.query.delete()
 
         print('Seeding users')
         users = create_users()
