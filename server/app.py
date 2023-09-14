@@ -8,7 +8,7 @@ from flask_restful import Resource
 
 # Local imports
 from config import app, db, api
-from models import User
+from models import User, CalendarEntry, JournalEntry, CareerJournalPrompt, SelfGrowthJournalPrompt, RelationshipJournalPrompt
 
 # Add your model imports
 
@@ -17,9 +17,6 @@ from models import User
 @app.route('/')
 def index():
     return '<h1>Phase 5 Project Server</h1>'
-
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
 
 class Users(Resource): 
     def get(self): 
@@ -35,7 +32,28 @@ class Logout(Resource):
 
         return make_response({}, 204)
 
+class CareerPrompts(Resource):
+    def get(self): 
+        prompts = [prompt.to_dict() for prompt in CareerJournalPrompt.query.all()]
+        return make_response(prompts, 200)
 
+class SelfGrowthPrompts(Resource): 
+    def get(self): 
+        prompts = [prompt.to_dict() for prompt in SelfGrowthJournalPrompt.query.all()]
+        return make_response(prompts, 200)
+
+class RelationshipPrompts(Resource): 
+    def get(self): 
+        prompts = [prompt.to_dict() for prompt in RelationshipJournalPrompt.query.all()]
+        return make_response(prompts, 200)
+
+api.add_resource(CareerPrompts, '/career_prompts')
+api.add_resource(SelfGrowthPrompts, '/self_growth_prompts')
+api.add_resource(RelationshipPrompts, '/relationship_prompts')
 api.add_resource(Users, '/users')
 api.add_resource(Logout, '/logout')
 
+
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)

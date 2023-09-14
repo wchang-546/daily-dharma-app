@@ -41,7 +41,6 @@ class CalendarEntry(db.Model, SerializerMixin):
     mood = db.Column(db.String) 
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # users = db.relationship('User')
 
     created_date = db.Column(db.DateTime, server_default=db.func.now())
     updated_date = db.Column(db.DateTime, onupdate=db.func.now())
@@ -55,21 +54,25 @@ class JournalEntry(db.Model, SerializerMixin):
     prompt = db.Column(db.String)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    # users = db.relationship('User', back_populates='journal_entries')
 
-   
     created_date = db.Column(db.DateTime, server_default=db.func.now())
     updated_date = db.Column(db.DateTime, onupdate=db.func.now())
 
 class CareerJournalPrompt(db.Model, SerializerMixin):
+    __tablename__ = 'career_prompts'
+
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String) 
 
 class SelfGrowthJournalPrompt(db.Model, SerializerMixin): 
+    __tablename__ = 'self_growth_prompts'
+
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String)
 
 class RelationshipJournalPrompt(db.Model, SerializerMixin):
+    __tablename__ = 'relationship_prompts'
+
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String) 
 
