@@ -14,7 +14,8 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String) 
     
     calender_entries = db.relationship('CalendarEntry', cascade='all, delete-orphan', backref='user') 
-    journal_entries = db.relationship('JournalEntry', cascade='all, delete-orphan', backref='user')
+    journal_entries = db.relationship('JournalEntry', back_populates='user')
+
     serialize_rules = ('-calender_entries.user', '-journal_entries.user',)
     
     @hybrid_property
@@ -50,10 +51,12 @@ class JournalEntry(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     journal_entry = db.Column(db.String)
-    #Make sure prompt gets included in the POST request 
-    prompt = db.Column(db.String)
-    
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    prompt_id = db.Column(db.Integer, db.ForeignKey('journal_prompts.id'))
+
+    user = db.relationship('User', back_populates='journal_entries')
+    journal_prompts = db.relationship('JournalPrompt', back_populates='journal_entries')
 
     created_date = db.Column(db.DateTime, server_default=db.func.now())
     updated_date = db.Column(db.DateTime, onupdate=db.func.now())
@@ -63,4 +66,5 @@ class JournalPrompt(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     prompt = db.Column(db.String) 
-
+    
+    journal_entries = db.relationship('JournalEntry', back_populates='journal_prompts') 

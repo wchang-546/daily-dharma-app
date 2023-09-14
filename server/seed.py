@@ -59,22 +59,22 @@ def create_journal_entries():
     journal_entries = []
     journal1 = JournalEntry(
         journal_entry = "I'm grateful for a healthy body.",
-        prompt = "What are you grateful for in this moment?",
+        prompt_id = 8,
         user_id = 1
     )
     journal2 = JournalEntry(
         journal_entry = "I want to work for something that makes the world a better place.",
-        prompt = "What purpose would you like in your work?",
+        prompt_id = 1,
         user_id = 1
     )
     journal3 = JournalEntry(
-        journal_entry = "I want to date someone who shares the same values and passions as me.",
-        prompt = "What are you looking for in a romantic partner?",
+        journal_entry = "I want to date someone who shares the same values and passions as me, and that we can communicate effectively.",
+        prompt_id = 4,
         user_id = 1
     )
     journal4 = JournalEntry(
         journal_entry = "The old-growth beauty of forests in the Pacific Northwest",
-        prompt = "What is something that inspired you recently?",
+        prompt_id = 6,
         user_id = 1
     )
     journal_entries.append(journal1)
