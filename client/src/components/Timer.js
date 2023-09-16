@@ -60,28 +60,16 @@ function Timer(){
         deadline.setSeconds(deadline.getSeconds() + 10);
         return deadline;
     }
- 
-    // We can use useEffect so that when the component
-    // mount the timer will start as soon as possible
- 
-    // We put empty array to act as componentDid
-    // mount only
-    useEffect(() => {
+
+    const onClickStart = () => {
         clearTimer(getDeadTime());
-    }, []);
- 
-    // Another way to call the clearTimer() to start
-    // the countdown is via action event from the
-    // button first we create function to be called
-    // by the button
-    const onClickReset = () => {
-        clearTimer(getDeadTime());
-    }
- 
+    };
+
     return (
         <div>
             <h2>{timer}</h2>
-            <button onClick={onClickReset}>Reset</button>
+            <button onClick={onClickStart}> Start Meditation </button>
+            <button onClick={onClickStart}>Restart Session</button>
         </div>
     )
 }

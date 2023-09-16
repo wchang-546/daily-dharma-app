@@ -4,10 +4,11 @@ import Card from 'react-bootstrap/Card';
 
 function JournalApp() { 
     const [randomPrompt, setRandomPrompt] = useState([]); 
-    const [entries, setEntries] = useState([])
+    const [entries, setEntries] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:3000/career_prompts")
+        fetch("http://localhost:3000/prompts")
             .then((res) => res.json())
             .then((data) => {
                 const randomIndex = Math.floor(Math.random() * data.length);
@@ -15,6 +16,28 @@ function JournalApp() {
             })
     }, [])
 
+    //Write code to set entries state to entries that match the session user_id 
+
+    const handleSearch = (e) => {
+        console.log(e.target.value);
+        setSearchInput(e.target.value)
+    }
+
+    const filteredEntries = entries.filter((entry) => {
+        return entry.name
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      });
+    
+    //Fix code here to display user_id
+    const entriesToDisplay = filteredEntries.map((entry) => {
+        if (entry.id === 'user_id') {
+            return (<div>
+                        <h1> {entry.prompt} </h1>
+                        <h2> {entry.journal_entry} </h2>
+                    </div> )
+        }
+    })
 
     return ( 
         <div>
@@ -24,8 +47,8 @@ function JournalApp() {
             <Button variant='secondary' type='submit'> Submit </Button>
             </Card>
             <Card className='right-box'> 
-                <h3> Past Entries - <br/> Search box </h3>
-                <input placeholder='Search'/>
+                <h3> Past Entries </h3>
+                <input placeholder='Search' onChange={handleSearch}/>
             </Card>
         </div>
     )
