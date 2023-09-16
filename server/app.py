@@ -19,7 +19,13 @@ def index():
     return '<h1>Phase 5 Project Server</h1>'
 
 class Login(Resource): 
-    pass
+    def post(self): 
+        user = User.query.filter(User.username == request.get_json()['username']).one_or_none()
+        if user is None:
+            return make_response({"Error": "User not found"}, 404)
+        session['user_id'] = user.id
+        return make_response(user.to_dict(), 200)
+api.add_resource(Login, '/login')
 
 class Logout(Resource):
     def delete(self): 

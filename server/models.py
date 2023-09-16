@@ -16,7 +16,7 @@ class User(db.Model, SerializerMixin):
     calender_entries = db.relationship('CalendarEntry', cascade='all, delete-orphan', backref='user') 
     journal_entries = db.relationship('JournalEntry', back_populates='user')
 
-    serialize_rules = ('-calender_entries.users', '-journal_entries.users', '-journal_entries.journal_prompts')    
+    serialize_rules = ('-calender_entries.user', '-journal_entries.user', '-journal_entries.journal_prompt')    
 
     @hybrid_property
     def password_hash(self):
