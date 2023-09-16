@@ -8,23 +8,24 @@ from flask_restful import Resource
 
 # Local imports
 from config import app, db, api
-from models import User, CalendarEntry, JournalEntry, JournalPrompt
 
 # Add your model imports
+from models import User, CalendarEntry, JournalEntry, JournalPrompt
 
-
-# Views go here!
-@app.route('/')
-def index():
-    return '<h1>Phase 5 Project Server</h1>'
 
 class Login(Resource): 
     def post(self): 
-        user = User.query.filter(User.username == request.get_json()['username']).one_or_none()
+        username = request.get_json()['username']
+        password = request.get_json()['password']
+
+        user = User.query.filter(User.username == username).one_or_none()
         if user is None:
-            return make_response({"Error": "User not found"}, 404)
-        session['user_id'] = user.id
-        return make_response(user.to_dict(), 200)
+            return make_response({"Error": "User not found"}, 401)
+        if user.authenticate(password): 
+            session['user_id'] = user.id
+            return make_response(user.to_dict(), 200)
+        else: 
+            return make_response({"Error": "Invalid password"}, 401)
 api.add_resource(Login, '/login')
 
 class Logout(Resource):

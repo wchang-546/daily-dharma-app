@@ -15,8 +15,8 @@ def create_users():
     users = []
     user1 = User(
         username = "wchang",
-        _password_hash = "password"
     )
+    user1.set_password('password')
     users.append(user1) 
     return users
 
