@@ -10,18 +10,28 @@ import JournalApp from './JournalApp';
 import MeditationApp from './MeditationApp';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState('') 
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:5555/check_session')
+      .then((res) => {
+        if (res.status === 200) {
+          res.json()
+          .then((user) => setUser(user))
+        }
+      })
+  }, [])
 
   return (
   <div> 
-    <NavbarApp /> 
+    <NavbarApp user={user} setUser={setUser}/> 
     <Routes>
       <Route exact path='/' element={<LoginForm />}/> 
       <Route exact path='/journal'element={<JournalApp />}/> 
       <Route exact path='/mood' element={<CalendarApp />}/> 
       <Route exact path='/meditate' element={<MeditationApp />}/>
       <Route exact path='/account' element={<ManageAccount />}/>  
-      <Route exact path='/login' element={<LoginForm isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>  
+      <Route exact path='/login' element={<LoginForm user={user} setUser={setUser}/>}/>  
       <Route exact path='/register/' element={<RegisterForm />}/>
     </Routes>
   </div>

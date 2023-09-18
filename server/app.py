@@ -12,6 +12,18 @@ from config import app, db, api
 # Add your model imports
 from models import User, CalendarEntry, JournalEntry, JournalPrompt
 
+class Register(Resource): 
+    def post(self): 
+        username = request.get_json()['username']
+        password = request.get_json()['password']
+        new_account = User(
+            username=username,
+            password_hash=password 
+        )
+        db.session.add(new_account)
+        db.session.commit()
+        session['user_id'] = new_account.id 
+api.add_resource(Register, '/register')
 
 class Login(Resource): 
     def post(self): 
@@ -34,8 +46,17 @@ class Logout(Resource):
         return make_response({}, 204)
 api.add_resource(Logout, '/logout')
 
+class CheckSession(Resource):
+    def get(self): 
+        user = User.query.filter(User.id == session.get('user_id')).first()
+        if user:
+            return make_response(user.to_dict(rules=('-password_hash',)), 200)
+        elif user is None: 
+            return {}, 204
+        #Why is it returning 204 if there is a session['user_id'] from login?? Why is the session not setting? 
+api.add_resource(CheckSession, '/check_session')
+
 class Users(Resource): 
-    #How will this get be used? To retrieve account info on the login and register page. 
     def get(self): 
         if session.get('user_id'):
              user = User.query.filter(User.id == session['user_id']).one_or_none()

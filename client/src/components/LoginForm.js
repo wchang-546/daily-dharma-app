@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-function LoginForm({ isLoggedIn, setIsLoggedIn }){
+function LoginForm({ user, setUser }){
 
     const formSchema = yup.object().shape({
       username: yup.string().required("Must enter a username"),
@@ -26,25 +26,21 @@ function LoginForm({ isLoggedIn, setIsLoggedIn }){
           },
           body: JSON.stringify(values, null, 2),
         })
-        .then((res) => res.json())
         .then((res) => {
-          if (res.status == 200) {
-            setIsLoggedIn(true)
-            console.log(res)
+          if (res.status === 200) {
+            res.json()
+            .then((user) => {setUser(user)})
           }
-        })
-        // .then((data) => console.log(data))
-
-        //Back end - Write a function that Users/Sellers.query.filter(values.username)
-        //Back end - GET request by user/seller ID.
-        //Front end - Assign useState variable with user/seller items. 
+          else if (!res.ok) {
+            console.error(res)
+          }})
       }
     })
 
   
     return (
         <Card style={{ width: '18rem' }} className='center-box'>
-                {isLoggedIn ? (
+                {user ? (
                 <Card.Text>You are logged in!</Card.Text>
                 ) : (
                     <Card.Body>

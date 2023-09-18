@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
  
 function Timer(){
     // We need ref in this, because we are dealing
@@ -6,7 +6,6 @@ function Timer(){
     // stop it when needed
     const Ref = useRef(null);
  
-    // The state for our timer
     const [timer, setTimer] = useState('00:00:00');
  
     const getTimeRemaining = (e) => {
@@ -40,7 +39,7 @@ function Timer(){
         // If you adjust it you should also need to
         // adjust the Endtime formula we are about
         // to code next   
-        setTimer('00:00:10');
+        setTimer('00:10:00');
  
         // If you try to remove this line the
         // updating of timer Variable will be
@@ -54,7 +53,6 @@ function Timer(){
  
     const getDeadTime = () => {
         let deadline = new Date();
- 
         // This is where you need to adjust if
         // you entend to add more time
         deadline.setSeconds(deadline.getSeconds() + 10);

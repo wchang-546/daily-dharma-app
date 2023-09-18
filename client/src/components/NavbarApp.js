@@ -3,11 +3,16 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
-function NavbarApp({ isLoggedIn }){
+function NavbarApp({ user, setUser }){
 
     const handleLogout = () => {
         fetch("/logout", {
           method: "DELETE",
+        })
+        .then((res) => {
+            if (res.ok) {
+                setUser(null)
+            }
         })
       }
 
@@ -18,8 +23,8 @@ function NavbarApp({ isLoggedIn }){
                     <NavLink to='/journal'> Journal </NavLink>
                     <NavLink to='/mood'> Mood Tracking </NavLink> 
                     <NavLink to="/meditate"> Meditate </NavLink> 
-                    {isLoggedIn ? <NavLink to='/account'> Manage Account </NavLink> : null}
-                    {isLoggedIn ? <Button onClick={handleLogout} variant='secondary'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}
+                    {user ? <NavLink to='/account'> Manage Account </NavLink> : null}
+                    {user ? <Button onClick={handleLogout} variant='secondary'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}
                 </Container>
             </Navbar>
         </header>
