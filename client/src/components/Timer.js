@@ -1,75 +1,68 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
  
 function Timer(){
-    // We need ref in this, because we are dealing
-    // with JS setInterval to keep track of it and
-    // stop it when needed
-    const Ref = useRef(null);
- 
-    const [timer, setTimer] = useState('00:00:00');
- 
-    const getTimeRemaining = (e) => {
-        const total = Date.parse(e) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-        return {
-            total, hours, minutes, seconds
-        };
-    }
- 
-    const startTimer = (e) => {
-        let { total, hours, minutes, seconds }
-                    = getTimeRemaining(e);
-        if (total >= 0) {
- 
-            // update the timer
-            // check if less than 10 then we need to
-            // add '0' at the beginning of the variable
-            setTimer(
-                (hours > 9 ? hours : '0' + hours) + ':' +
-                (minutes > 9 ? minutes : '0' + minutes) + ':'
-                + (seconds > 9 ? seconds : '0' + seconds)
-            )
-        }
-    }
- 
-    const clearTimer = (e) => {
- 
-        // If you adjust it you should also need to
-        // adjust the Endtime formula we are about
-        // to code next   
-        setTimer('00:10:00');
- 
-        // If you try to remove this line the
-        // updating of timer Variable will be
-        // after 1000ms or 1sec
-        if (Ref.current) clearInterval(Ref.current);
-        const id = setInterval(() => {
-            startTimer(e);
-        }, 1000)
-        Ref.current = id;
-    }
- 
-    const getDeadTime = () => {
-        let deadline = new Date();
-        // This is where you need to adjust if
-        // you entend to add more time
-        deadline.setSeconds(deadline.getSeconds() + 10);
-        return deadline;
-    }
-
-    const onClickStart = () => {
-        clearTimer(getDeadTime());
+    const [minutes, setMinutes] = useState(5);
+    const [seconds, setSeconds] = useState(0);
+    const [isActive, setIsActive] = useState(false);
+  
+    useEffect(() => {
+      let interval;
+  
+      if (isActive) {
+        interval = setInterval(() => {
+          if (minutes === 0 && seconds === 0) {
+            clearInterval(interval);
+            setIsActive(false);
+          } else {
+            if (seconds === 0) {
+              setMinutes(minutes - 1);
+              setSeconds(59);
+            } else {
+              setSeconds(seconds - 1);
+            }
+          }
+        }, 1000);
+      } else {
+        clearInterval(interval);
+      }
+  
+      return () => clearInterval(interval);
+    }, [isActive, minutes, seconds]);
+  
+    const toggleTimer = () => {
+      setIsActive(!isActive);
     };
-
+  
+    const increaseMinutes = () => {
+      setMinutes(minutes + 1);
+    };
+  
+    const decreaseMinutes = () => {
+      if (minutes > 0) {
+        setMinutes(minutes - 1);
+      }
+    };
+  
+    const resetTimer = () => {
+      setIsActive(false);
+      setMinutes(5);
+      setSeconds(0);
+    };
+  
     return (
-        <div>
-            <h2>{timer}</h2>
-            <button onClick={onClickStart}> Start Meditation </button>
-            <button onClick={onClickStart}>Restart Session</button>
+      <div className="countdown-timer">
+        <div className="timer-display">
+          <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
+          <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
         </div>
-    )
-}
+        <div className="timer-controls">
+          <button onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
+          <button onClick={increaseMinutes}>+1 Minute</button>
+          <button onClick={decreaseMinutes}>-1 Minute</button>
+          <button onClick={resetTimer}>Reset</button>
+        </div>
+      </div>
+    );
+  }
  
 export default Timer;

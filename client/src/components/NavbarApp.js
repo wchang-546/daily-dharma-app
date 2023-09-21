@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
@@ -11,14 +12,14 @@ function NavbarApp({ user, setUser }){
         })
         .then((res) => {
             if (res.ok) {
-                setUser(null)
+                setUser('')
             }
         })
       }
 
     return (
         <header> 
-            <Navbar bg="dark" variant='dark'>
+            <Navbar bg="dark" variant='light'>
                 <Container>
                     <NavLink to='/journal'> Journal </NavLink>
                     <NavLink to='/mood'> Mood Tracking </NavLink> 

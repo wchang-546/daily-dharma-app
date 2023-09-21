@@ -29,11 +29,9 @@ function LoginForm({ user, setUser }){
         .then((res) => {
           if (res.status === 200) {
             res.json()
-            .then((user) => {setUser(user)})
+            .then((res) => {setUser(res)})
           }
-          else if (!res.ok) {
-            console.error(res)
-          }})
+        })
       }
     })
 

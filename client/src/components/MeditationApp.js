@@ -7,7 +7,7 @@ function MeditationApp(){
 
     return (
         <Card className='center-box'> 
-            <h1> Meditation Page </h1>
+            <h1> Meditation </h1>
             <Timer />
         </Card>
     )

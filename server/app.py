@@ -30,30 +30,28 @@ class Login(Resource):
         username = request.get_json()['username']
         password = request.get_json()['password']
 
-        user = User.query.filter(User.username == username).one_or_none()
+        user = User.query.filter(User.username == username).first()
         if user is None:
             return make_response({"Error": "User not found"}, 401)
         if user.authenticate(password): 
             session['user_id'] = user.id
-            return make_response(user.to_dict(), 200)
+            return user.to_dict(), 200
         else: 
-            return make_response({"Error": "Invalid password"}, 401)
+            return {"Error": "Invalid password"}, 401
 api.add_resource(Login, '/login')
 
 class Logout(Resource):
     def delete(self): 
         session['user_id'] = None
-        return make_response({}, 204)
+        return {}, 204
 api.add_resource(Logout, '/logout')
 
 class CheckSession(Resource):
     def get(self): 
-        user = User.query.filter(User.id == session.get('user_id')).first()
-        if user:
-            return make_response(user.to_dict(rules=('-password_hash',)), 200)
-        elif user is None: 
-            return {}, 204
-        #Why is it returning 204 if there is a session['user_id'] from login?? Why is the session not setting? 
+        if session.get('user_id'):
+            user = User.query.filter(User.id == session.get('user_id')).first()
+            return user.to_dict(), 200
+        return {}, 204
 api.add_resource(CheckSession, '/check_session')
 
 class Users(Resource): 
@@ -64,6 +62,21 @@ class Users(Resource):
         return {'error': '401 Unauthorized'}, 401
 api.add_resource(Users, '/users')
 
+class UsersById(Resource): 
+    def patch(self, id): 
+        username = request.get_json()['username']
+        old_password = request.get_json()['old_password']
+        new_password = request.get_json()['new_password']
+        if session.get('user_id'): 
+            user = User.query.filter(User.id == id).first()
+            if user.authenticate(old_password): 
+                user.username = username 
+                user.password_hash = new_password
+                db.session.commit() 
+                return user.to_dict(), 202
+        return {'error': '401 Unauthorized'}, 401
+api.add_resource(UsersById, '/users/<int:id>' )
+
 class JournalPrompts(Resource):
     def get(self): 
         prompts = [prompt.to_dict(rules=('-journal_entries',)) for prompt in JournalPrompt.query.all()]
@@ -71,15 +84,14 @@ class JournalPrompts(Resource):
 api.add_resource(JournalPrompts, '/prompts')
 
 class CalendarEntries(Resource):
-    #Assuming session['user_id'] is the identifier 
     def get(self): 
-        if session['user_id']: 
+        if session.get('user_id'): 
             #ERROR: find the right serialization rule here. Is it users.calendar_entries or users? 
             entries = [entry.to_dict(rules=('-user',)) for entry in CalendarEntry.query.filter(CalendarEntry.user_id == session['user_id']).all()]
             return make_response(entries, 200) 
     
     def post(self): 
-        if session['user_id']: 
+        if session.get('user_id'): 
             data = request.get_json() 
             #Check this session['user_id']
             new_entry = CalendarEntry(mood=data['mood'], user_id=session['user_id'])
@@ -90,42 +102,47 @@ class CalendarEntries(Resource):
 api.add_resource(CalendarEntries, '/calendar_entries')
 
 class CalendarEntriesById(Resource): 
-    #Add in session['user_id'] in here, as authorization  
     def get(self, id): 
-        entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
-        if entry is None:
-            return make_response({"Error": "Calendary entry not found"}, 404)
+        if session.get('user_id'): 
+            entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
+            if entry is None:
+                return make_response({"Error": "Calendary entry not found"}, 404)
         #ERROR: figure out serialization rule here
-        return make_response(entry.to_dict(rules=('-user',)), 200)
+            return make_response(entry.to_dict(rules=('-user',)), 200)
+        return {'error': '401 Unauthorized'}, 401
     
     def patch(self, id): 
-        entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
-        if entry: 
-            data = request.get_json() 
-            for key in data: 
-                setattr(entry, key, data[key])      
-            return make_response(entry.to_dict(rules=('-user',)), 202)
-        return make_response({"Error": "Calendar entry unable to be edited."}, 404)
+        if session.get('user_id'):
+            entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
+            if entry: 
+                data = request.get_json() 
+                for key in data: 
+                    setattr(entry, key, data[key])      
+                return make_response(entry.to_dict(rules=('-user',)), 202)
+            return make_response({"Error": "Calendar entry unable to be edited."}, 404)
+        return {'error': '401 Unauthorized'}, 401
     
     def delete(self, id): 
-        entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
-        if entry: 
-            db.session.delete(entry)
-            db.session.commit()
-            return make_response({}, 204)
-        return make_response({"Error": "Calendar entry not found"}, 404)
+        if session.get('user_id'):
+            entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
+            if entry: 
+                db.session.delete(entry)
+                db.session.commit()
+                return make_response({}, 204)
+            return make_response({"Error": "Calendar entry not found"}, 404)
+        return {'error': '401 Unauthorized'}, 401
 api.add_resource(CalendarEntriesById, '/calendar_entries/<int:id>')
 
 class JournalEntries(Resource): 
     def get(self): 
-        if session.get['user_id"']:
+        if session.get('user_id"'):
             entries = [entry.to_dict(rules=('-user','-journal_prompt.journal_entries')) for entry in JournalEntry.query.filter(JournalEntry.id == session['user_id']).all()]
             return make_response(entries, 200)
         else: 
             return make_response({"Error": "You must log in to view past entries"}, 200)
     
     def post(self): 
-        if session['user_id']: 
+        if session.get('user_id"'): 
             data = request.get_json() 
             #Check this session['user_id'] and keys for journal_entry and prompt_id
             new_entry = JournalEntry(journal_entry=data['journal_entry'], user_id=session['user_id'], prompt_id=data['prompt_id'])
