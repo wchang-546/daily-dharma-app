@@ -32,8 +32,8 @@ function App() {
             <Route exact path='/mood' element={<CalendarApp />}/> 
             <Route exact path='/meditate' element={<MeditationApp />}/>
             <Route exact path='/account' element={<ManageAccount user={user} setUser={setUser} />}/>  
-            <Route exact path='/login' element={<LoginForm user={user} setUser={setUser}/>}/>  
-            <Route exact path='/register/' element={<RegisterForm />}/>
+            <Route exact path='/login' element={<LoginForm user={user} setUser={setUser} />}/>  
+            <Route exact path='/register/' element={<RegisterForm user={user} setUser={setUser} />}/>
           </Routes>
       </div>
   )

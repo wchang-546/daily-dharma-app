@@ -6,8 +6,8 @@ import Timer from './Timer'
 function MeditationApp(){
 
     return (
-        <Card className='center-box'> 
-            <h1> Meditation </h1>
+        <Card className='meditate-box'> 
+            <h1> Meditation Center </h1>
             <Timer />
         </Card>
     )

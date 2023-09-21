@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-function RegisterForm({ }){
+function RegisterForm({ user, setUser }){
     const [isRegistered, setIsRegistered] = useState(false);
     
     const formSchema = yup.object().shape({
@@ -30,15 +30,10 @@ function RegisterForm({ }){
         .then((res) => res.json())
         .then((res) => {
           if (res.status == 200) {
-            // setIsLoggedIn(true)
             console.log(res)
+            ((user) => setUser(user))
           }
         })
-        // .then((data) => console.log(data))
-
-        //Back end - Write a function that checks if the username already exists, responds with either window alert or Formik alert, 
-        // and POSTs if not. 
-        //Front end - Redirect to login page once registered. 
       }
     })
 

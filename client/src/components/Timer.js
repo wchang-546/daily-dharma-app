@@ -1,10 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
- 
+import singingBowlSound from "./sounds/singing-bowl.mp3"
+
 function Timer(){
     const [minutes, setMinutes] = useState(5);
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
-  
+    const [playedSound, setPlayedSound] = useState(false);
+    const audioRef = useRef(null)
+
+    const ringSingingBowl = () => {
+        if (audioRef.current) {
+            audioRef.current.play(); 
+        }
+    }
+
     useEffect(() => {
       let interval;
   
@@ -13,6 +22,7 @@ function Timer(){
           if (minutes === 0 && seconds === 0) {
             clearInterval(interval);
             setIsActive(false);
+            ringSingingBowl();
           } else {
             if (seconds === 0) {
               setMinutes(minutes - 1);
@@ -22,12 +32,16 @@ function Timer(){
             }
           }
         }, 1000);
+        if (!playedSound){ 
+            ringSingingBowl();
+            setPlayedSound(true);
+        }
       } else {
         clearInterval(interval);
       }
   
       return () => clearInterval(interval);
-    }, [isActive, minutes, seconds]);
+    }, [isActive, minutes, seconds], []);
   
     const toggleTimer = () => {
       setIsActive(!isActive);
@@ -45,8 +59,9 @@ function Timer(){
   
     const resetTimer = () => {
       setIsActive(false);
-      setMinutes(5);
+      setMinutes(10);
       setSeconds(0);
+      setPlayedSound(false);
     };
   
     return (
@@ -56,13 +71,16 @@ function Timer(){
           <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
         </div>
         <div className="timer-controls">
-          <button onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
-          <button onClick={increaseMinutes}>+1 Minute</button>
-          <button onClick={decreaseMinutes}>-1 Minute</button>
-          <button onClick={resetTimer}>Reset</button>
+          <button className='green-button' onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
+          <button className='green-button' onClick={increaseMinutes}>+1 Minute</button>
+          <button className='green-button' onClick={decreaseMinutes}>-1 Minute</button>
+          <button className='green-button' onClick={resetTimer}>Reset</button>
         </div>
+        <audio ref={audioRef}>
+            <source src={singingBowlSound} type='audio/mpeg' />
+        </audio>
       </div>
     );
   }
- 
-export default Timer;
+
+  export default Timer; 

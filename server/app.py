@@ -16,13 +16,17 @@ class Register(Resource):
     def post(self): 
         username = request.get_json()['username']
         password = request.get_json()['password']
-        new_account = User(
+        existing_user = User.query.filter(User.username == username).first()
+        if existing_user: 
+            return {"Error": "User already exists."}, 404
+        new_user = User(
             username=username,
             password_hash=password 
         )
-        db.session.add(new_account)
+        db.session.add(new_user)
         db.session.commit()
-        session['user_id'] = new_account.id 
+        session['user_id'] = new_user.id 
+        return new_user.to_dict(), 200 
 api.add_resource(Register, '/register')
 
 class Login(Resource): 
@@ -64,12 +68,14 @@ api.add_resource(Users, '/users')
 
 class UsersById(Resource): 
     def patch(self, id): 
-        username = request.get_json()['username']
-        old_password = request.get_json()['old_password']
-        new_password = request.get_json()['new_password']
-        if session.get('user_id'): 
-            user = User.query.filter(User.id == id).first()
-            if user.authenticate(old_password): 
+        data = request.get_json()
+        username = data['username']
+        old_password = data['old_password']
+        new_password = data['new_password']
+        user = User.query.filter(User.id == id).first()
+        #If Flask session wasn't broken, I would use "if session.get('user_id)"
+        if user: 
+            if user and user.authenticate(old_password): 
                 user.username = username 
                 user.password_hash = new_password
                 db.session.commit() 

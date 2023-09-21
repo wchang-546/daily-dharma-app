@@ -21,11 +21,11 @@ function NavbarApp({ user, setUser }){
         <header> 
             <Navbar bg="dark" variant='light'>
                 <Container>
-                    <NavLink to='/journal'> Journal </NavLink>
-                    <NavLink to='/mood'> Mood Tracking </NavLink> 
-                    <NavLink to="/meditate"> Meditate </NavLink> 
-                    {user ? <NavLink to='/account'> Manage Account </NavLink> : null}
-                    {user ? <Button onClick={handleLogout} variant='secondary'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}
+                    <NavLink to='/journal' className='navbar-button'> Journal </NavLink>
+                    <NavLink to='/mood' className='navbar-button'> Mood Tracking </NavLink> 
+                    <NavLink to="/meditate" className='navbar-button'> Meditate </NavLink> 
+                    {user ? <NavLink to='/account' className='navbar-button'> Manage Account </NavLink> : null}
+                    {user ? <Button onClick={handleLogout} className='logout-button'> Logout </Button> : <NavLink to='/login'> Login/Register </NavLink>}
                 </Container>
             </Navbar>
         </header>
