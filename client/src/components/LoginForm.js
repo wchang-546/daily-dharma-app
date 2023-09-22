@@ -61,7 +61,7 @@ export default function LoginForm({ user, setUser }){
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.password}</p>
                                 <br />
-                                <Button variant='primary' type="submit">Login</Button>
+                                <Button className='green-button' type="submit">Login</Button>
                                 <br />
                                 <br />
                                 <br /> 

@@ -67,7 +67,7 @@ export default function RegisterForm({ user, setUser }){
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.password}</p>
                                 <br />
-                                <Button variant='primary' type="submit">Register</Button>
+                                <Button className='green-button' type="submit">Register</Button>
                                 <br />
                                 <br />
                                 <br /> 

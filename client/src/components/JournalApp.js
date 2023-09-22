@@ -70,7 +70,7 @@ export default function JournalApp({ user }) {
             <Card className='green-center-box' key={randomPrompt.id}> 
             <h2 className='headline'> {randomPrompt.prompt} </h2>
             <input type='text' placeholder='Enter response here' onChange={handleJournalEntryChange}/>
-            <Button variant='secondary' type='submit' onClick={handleSubmitJournal}> Submit </Button>
+            <Button className='green-button' type='submit' onClick={handleSubmitJournal}> Submit </Button>
             </Card>
             {user ? 
              <Card className='green-right-box'> 
