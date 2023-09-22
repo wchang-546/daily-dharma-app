@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import CalendarApp from "./CalendarApp";
 import NavbarApp from "./NavbarApp"
@@ -10,7 +10,9 @@ import JournalApp from './JournalApp';
 import MeditationApp from './MeditationApp';
 
 
-function App() {
+export default function App() {
+  const UserContext = createContext()
+
   const [user, setUser] = useState('') 
 
   useEffect(() => {
@@ -24,7 +26,8 @@ function App() {
   }, [])
 
   return (
-      <div> 
+      <div>
+        <UserContext.Provider value={user}> 
             <NavbarApp user={user} setUser={setUser}/>
           <Routes>
             <Route exact path='/' element={<LoginForm />}/> 
@@ -35,8 +38,7 @@ function App() {
             <Route exact path='/login' element={<LoginForm user={user} setUser={setUser} />}/>  
             <Route exact path='/register/' element={<RegisterForm user={user} setUser={setUser} />}/>
           </Routes>
+        </UserContext.Provider>
       </div>
   )
 }
-
-export default App;
