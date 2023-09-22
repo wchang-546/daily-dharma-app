@@ -22,7 +22,7 @@ def create_users():
 
 def create_calendar_entries():
     entries = [] 
-    moods = ["terrible", "bad", "okay", "good", "stoked"]
+    moods = ["Terrible", "Bad", "Okay", "Good", "Stoked"]
     entry1 = CalendarEntry(
         mood = rc(moods),
         user_id = 1,

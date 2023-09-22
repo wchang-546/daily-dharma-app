@@ -8,6 +8,7 @@ export default function JournalApp({ user }) {
     const [entries, setEntries] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [journalEntry, setJournalEntry] = useState('')
+
     useEffect(() => {
         fetch('/prompts')
             .then((res) => res.json())
@@ -35,18 +36,16 @@ export default function JournalApp({ user }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                journal_entry: journalEntry, // Assuming journalEntry is the text you want to submit
-                prompt_id: randomPrompt.id, // Assuming you want to associate it with the current prompt
+                journal_entry: journalEntry, 
+                prompt_id: randomPrompt.id,
             }),
         });
     
         if (response.ok) {
-            // If the request is successful, add the new entry to the state
             const newEntry = await response.json();
             setEntries([...entries, newEntry]);
-            setJournalEntry(''); // Clear the journal entry input
+            setJournalEntry(''); 
         } else {
-            // Handle the error here, e.g., display an error message to the user
             console.error('Failed to submit journal entry');
         }
     };
@@ -79,7 +78,6 @@ export default function JournalApp({ user }) {
                 <input placeholder='Search' onChange={handleSearch}/>
                 {entriesToDisplay}
             </Card> : null}
-   
         </div>
     )
 }

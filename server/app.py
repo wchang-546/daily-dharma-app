@@ -86,25 +86,25 @@ api.add_resource(UsersById, '/users/<int:id>' )
 class JournalPrompts(Resource):
     def get(self): 
         prompts = [prompt.to_dict(rules=('-journal_entries',)) for prompt in JournalPrompt.query.all()]
-        return make_response(prompts, 200)
+        return prompts, 200
 api.add_resource(JournalPrompts, '/prompts')
 
 class CalendarEntries(Resource):
     def get(self): 
-        if session.get('user_id'): 
-            #ERROR: find the right serialization rule here. Is it users.calendar_entries or users? 
-            entries = [entry.to_dict(rules=('-user',)) for entry in CalendarEntry.query.filter(CalendarEntry.user_id == session['user_id']).all()]
-            return make_response(entries, 200) 
+        # if session.get('user_id'): 
+        entries = [entry.to_dict(rules=('-user',)) for entry in CalendarEntry.query.all()]
+        return entries, 200
     
     def post(self): 
-        if session.get('user_id'): 
-            data = request.get_json() 
-            #Check this session['user_id']
-            new_entry = CalendarEntry(mood=data['mood'], user_id=session['user_id'])
-            db.session.add(new_entry)
-            db.session.commit()
-            return make_response(new_entry, 200)
-        return make_response({"Error": "Sign in to submit a calendar entry."}, 404)
+        # if session.get('user_id'): 
+        data = request.get_json() 
+        #Check this session['user_id']
+        #Hardcode user_id for now
+        new_entry = CalendarEntry(mood=data['mood'], user_id=1)
+        db.session.add(new_entry)
+        db.session.commit()
+        return new_entry.to_dict(), 200
+        # return make_response({"Error": "Sign in to submit a calendar entry."}, 404)
 api.add_resource(CalendarEntries, '/calendar_entries')
 
 class CalendarEntriesById(Resource): 

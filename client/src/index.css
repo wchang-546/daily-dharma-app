@@ -18,6 +18,13 @@
   transform: translate(-50%, -50%);
 }
 
+.right-box { 
+  position: absolute;
+  top: 40%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+}
+
 .green-right-box { 
   background-color: #217969;
   position: absolute;
@@ -29,6 +36,13 @@
   background-color: #217969;
 }
 
+.green-left-box { 
+  background-color: #217969;
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translate(-50%, -50%);
+}
 
 .green-center-box { 
   background-color: #217969;
