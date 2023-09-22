@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-function ManageAccount({ user, setUser }){
+export default function ManageAccount({ user, setUser }){
 
     const formSchema = yup.object().shape({
         username: yup.string().required("Must enter a username"),
@@ -14,7 +14,7 @@ function ManageAccount({ user, setUser }){
       
       const formik = useFormik({
         initialValues: {
-          username: "",
+          username: `${user.username}`,
           old_password: "",
           new_password: "", 
         },
@@ -38,33 +38,26 @@ function ManageAccount({ user, setUser }){
   
 
     return(
-        <Card className='center-box'> 
+        <Card className='green-login-box'> 
         <form onSubmit={formik.handleSubmit}>
-            <h1> Update account credentials </h1>
-            <h3> Username: 
-                <input placeholder={user.username} 
-                id='username' 
-                value={formik.values.username} 
-                onChange={formik.handleChange}/> 
-            </h3>
-            <h3> Enter Existing Password: 
-                <input placeholder='Type here' 
+            <h1 className='manage-account-font'> Update account credentials </h1>
+            <h3 className='manage-account-font-small'> Enter Existing Password: 
+                <br/> <input placeholder='Type here' 
                 id='old_password'
                 type='password'
                 value={formik.values.old_password} 
                 onChange={formik.handleChange}/>  
             </h3>
-            <h3> Enter New Password: 
+            <h3 className='manage-account-font-small'> Enter New Password: 
+                <br/> 
                 <input placeholder='Type here' 
-                id='new_password'
-                type='password'
-                value={formik.values.new_password} 
-                onChange={formik.handleChange}/> 
+                    id='new_password'
+                    type='password'
+                    value={formik.values.new_password} 
+                    onChange={formik.handleChange}/> 
             </h3>
-            <Button variant='primary' type='submit'> Update </Button>
+            <Button className='login-button' type='submit'> Update </Button>
         </form>
         </Card> 
     )
 }
-
-export default ManageAccount;

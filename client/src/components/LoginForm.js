@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-function LoginForm({ user, setUser }){
+export default function LoginForm({ user, setUser }){
 
     const formSchema = yup.object().shape({
       username: yup.string().required("Must enter a username"),
@@ -37,15 +37,13 @@ function LoginForm({ user, setUser }){
 
   
     return (
-        <Card style={{ width: '18rem' }} className='center-box'>
+        <Card style={{ width: '18rem' }} className='green-login-box'>
                 {user ? (
-                <Card.Text>You are logged in!</Card.Text>
+                <Card.Text className='headline'>You are logged in!</Card.Text>
                 ) : (
                     <Card.Body>
-                        <Card.Title> Login: </Card.Title> 
+                        <Card.Title className='headline'> Login: </Card.Title> 
                             <form onSubmit={formik.handleSubmit}>
-                                <label>
-                                Username:   
                                 <input
                                     id='username'
                                     type="text"
@@ -54,9 +52,6 @@ function LoginForm({ user, setUser }){
                                     onChange={formik.handleChange}
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.username}</p>
-                                </label>
-                                <label>
-                                Password:
                                 <input
                                     id='password'
                                     type="password"
@@ -65,7 +60,6 @@ function LoginForm({ user, setUser }){
                                     onChange={formik.handleChange}
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.password}</p>
-                                </label>
                                 <br />
                                 <Button variant='primary' type="submit">Login</Button>
                                 <br />
@@ -79,5 +73,4 @@ function LoginForm({ user, setUser }){
     );
   }
   
-export default LoginForm;
   

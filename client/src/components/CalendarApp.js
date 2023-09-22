@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
  
-function CalendarApp() {
+export default function CalendarApp() {
     const [value, setValue] = useState(new Date());
     
     const selectDate = (e) => {
@@ -21,5 +21,3 @@ function CalendarApp() {
         </div>
     );
 }
-
-export default CalendarApp;

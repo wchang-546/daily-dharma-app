@@ -7,6 +7,9 @@
   background-size: cover;
 }
 
+.nav-bar { 
+  background-color: #217969;
+}
 
 .center-box { 
   position: absolute;
@@ -15,21 +18,30 @@
   transform: translate(-50%, -50%);
 }
 
-.right-box { 
+.green-right-box { 
+  background-color: #217969;
   position: absolute;
   top: 40%;
   left: 80%;
 }
 
-.meditate-box { 
+.green-center-box { 
+  background-color: #217969;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
+.green-login-box { 
+  background-color: #217969;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
 
-/* CSS */
 .green-button {
   background-color: #c2fbd7;
   border-radius: 100px;
@@ -102,6 +114,59 @@
 }
 
 
+.login-button {
+  align-items: center;
+  background-color: #b3e4b9;
+  background-position: 0 0;
+  border: 1px solid #b3e4b9;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #137f1a;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 33.4929px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-underline-offset: 1px;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+}
+
+.login-button:active,
+.login-button:hover,
+.login-button:focus {
+  outline: 0;
+}
+
+
+.login-button:active {
+  background-color: #137f1a;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
+  color: #FFFFFF;
+}
+
+.login-button:hover {
+  background-color: #12b723;
+  border-color: #12b723;
+}
+
+.login-button:active:hover,
+.login-button:focus:hover,
+.login-button:focus {
+  background-color: #137f1a;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
+  color: #FFFFFF;
+}
+
 .logout-button {
   align-items: center;
   background-color: #FFE7E7;
@@ -155,3 +220,32 @@
   color: #FFFFFF;
 }
 
+.headline { 
+  color: #ffffff;
+  font-family: 'Merriweather', serif; 
+  font-size: 30px; 
+  font-weight: 300; 
+  line-height: 40px; 
+  margin: 0 30px 40px; 
+  text-align: center; 
+  text-shadow: #2a8d7b -1px -1px; }
+
+.manage-account-font { 
+  color: #ffffff;
+  font-family: 'Merriweather', serif; 
+  font-size: 35px; 
+  font-weight: 300; 
+  line-height: 40px; 
+  margin: 0 30px 40px; 
+  text-align: center; 
+  text-shadow: #2a8d7b -1px -1px; }
+
+.manage-account-font-small { 
+  color: #ffffff;
+  font-family: 'Merriweather', serif; 
+  font-size: 20px; 
+  font-weight: 300; 
+  line-height: 40px; 
+  margin: 0 30px 40px; 
+  text-align: center; 
+  text-shadow: #2a8d7b -1px -1px; }

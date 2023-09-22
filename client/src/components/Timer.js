@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import singingBowlSound from "./sounds/singing-bowl.mp3"
 
-function Timer(){
+export default function Timer(){
     const [minutes, setMinutes] = useState(5);
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
@@ -9,9 +9,7 @@ function Timer(){
     const audioRef = useRef(null)
 
     const ringSingingBowl = () => {
-        if (audioRef.current) {
-            audioRef.current.play(); 
-        }
+          audioRef.current.play(); 
     }
 
     useEffect(() => {
@@ -66,7 +64,7 @@ function Timer(){
   
     return (
       <div className="countdown-timer">
-        <div className="timer-display">
+        <div className="headline">
           <span>{minutes < 10 ? `0${minutes}` : minutes}</span>:
           <span>{seconds < 10 ? `0${seconds}` : seconds}</span>
         </div>
@@ -82,5 +80,3 @@ function Timer(){
       </div>
     );
   }
-
-  export default Timer; 

@@ -36,7 +36,7 @@ class Login(Resource):
 
         user = User.query.filter(User.username == username).first()
         if user is None:
-            return make_response({"Error": "User not found"}, 401)
+            return make_response({"Error": "User not found."}, 401)
         if user.authenticate(password): 
             session['user_id'] = user.id
             return user.to_dict(), 200

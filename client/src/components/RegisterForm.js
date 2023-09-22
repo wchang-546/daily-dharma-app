@@ -5,7 +5,7 @@ import * as yup from "yup";
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-function RegisterForm({ user, setUser }){
+export default function RegisterForm({ user, setUser }){
     const [isRegistered, setIsRegistered] = useState(false);
     
     const formSchema = yup.object().shape({
@@ -20,7 +20,7 @@ function RegisterForm({ user, setUser }){
       },
       validationSchema: formSchema, 
       onSubmit: (values) => {
-        fetch('http://127.0.0.1:5555/users', {
+        fetch('http://127.0.0.1:5555/register', {
           method: 'POST', 
           headers: {
             "Content-Type": "application/json",
@@ -29,9 +29,12 @@ function RegisterForm({ user, setUser }){
         })
         .then((res) => res.json())
         .then((res) => {
-          if (res.status == 200) {
+          if (res.hasOwnProperty("Error")){ 
+            alert(res.Error)
+          } else if (res.status == 200) {
             console.log(res)
-            ((user) => setUser(user))
+            alert(res.username)
+            ((res) => setUser(res))
           }
         })
       }
@@ -39,15 +42,14 @@ function RegisterForm({ user, setUser }){
 
   
     return (
-        <Card style={{ width: '20rem' }} className='center-box'>
+        <Card style={{ width: '20rem' }} className='green-login-box'>
                 {isRegistered ? (
                 <Card.Text>User registration successful. <NavLink to='/login'> Sign in here </NavLink> </Card.Text>
                 ) : (
                     <Card.Body>
-                        <Card.Title> Register a new account: </Card.Title> 
+                        <Card.Title className='headline'> Register a new account: </Card.Title> 
                             <form onSubmit={formik.handleSubmit}>
-                                <label>
-                                Username:   
+ 
                                 <input
                                     id='username'
                                     type="text"
@@ -56,9 +58,6 @@ function RegisterForm({ user, setUser }){
                                     onChange={formik.handleChange}
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.username}</p>
-                                </label>
-                                <label>
-                                Password:
                                 <input
                                     id='password'
                                     type="password"
@@ -67,7 +66,6 @@ function RegisterForm({ user, setUser }){
                                     onChange={formik.handleChange}
                                 />
                                 <p style={{ color: "red" }}> {formik.errors.password}</p>
-                                </label>
                                 <br />
                                 <Button variant='primary' type="submit">Register</Button>
                                 <br />
@@ -81,5 +79,4 @@ function RegisterForm({ user, setUser }){
     );
   }
   
-export default RegisterForm;
   

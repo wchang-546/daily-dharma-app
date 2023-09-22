@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-function JournalApp() { 
+export default function JournalApp({ user }) { 
     const [randomPrompt, setRandomPrompt] = useState([]); 
     const [entries, setEntries] = useState([]);
     const [searchInput, setSearchInput] = useState("");
@@ -41,17 +41,17 @@ function JournalApp() {
 
     return ( 
         <div>
-            <Card className='center-box' key={randomPrompt.id}> 
-            <h2> {randomPrompt.prompt} </h2>
+            <Card className='green-center-box' key={randomPrompt.id}> 
+            <h2 className='headline'> {randomPrompt.prompt} </h2>
             <input type='text' placeholder='Enter response here'/>
             <Button variant='secondary' type='submit'> Submit </Button>
             </Card>
-            <Card className='right-box'> 
-                <h3> Past Entries </h3>
+            {user ? 
+             <Card className='green-right-box'> 
+                <h3 className='headline'> Past Entries </h3>
                 <input placeholder='Search' onChange={handleSearch}/>
-            </Card>
+            </Card> : null}
+   
         </div>
     )
 }
-
-export default JournalApp; 

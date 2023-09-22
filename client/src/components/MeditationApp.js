@@ -3,14 +3,12 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Timer from './Timer'
 
-function MeditationApp(){
+export default function MeditationApp(){
 
     return (
-        <Card className='meditate-box'> 
-            <h1> Meditation Center </h1>
+        <Card className='green-center-box'> 
+            <h1 className='headline'> Meditation Center </h1>
             <Timer />
         </Card>
     )
 }
-
-export default MeditationApp;

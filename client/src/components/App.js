@@ -18,7 +18,7 @@ function App() {
       .then((res) => {
         if (res.status === 200) {
           res.json()
-          .then((user) => setUser(user))
+          .then((res) => setUser(res))
         }
       })
   }, [])
@@ -28,7 +28,7 @@ function App() {
             <NavbarApp user={user} setUser={setUser}/>
           <Routes>
             <Route exact path='/' element={<LoginForm />}/> 
-            <Route exact path='/journal'element={<JournalApp />}/> 
+            <Route exact path='/journal'element={<JournalApp user={user} />}/> 
             <Route exact path='/mood' element={<CalendarApp />}/> 
             <Route exact path='/meditate' element={<MeditationApp />}/>
             <Route exact path='/account' element={<ManageAccount user={user} setUser={setUser} />}/>  
