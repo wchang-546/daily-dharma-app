@@ -6,8 +6,8 @@ import JournalEntry from './JournalEntry';
 export default function JournalApp({ user }) { 
     const [randomPrompt, setRandomPrompt] = useState([]); 
     const [entries, setEntries] = useState([]);
-    const [searchInput, setSearchInput] = useState("");
-
+    const [searchInput, setSearchInput] = useState('');
+    const [journalEntry, setJournalEntry] = useState('')
     useEffect(() => {
         fetch('/prompts')
             .then((res) => res.json())
@@ -22,6 +22,35 @@ export default function JournalApp({ user }) {
         })
     }, [])
 
+    const handleJournalEntryChange = (e) => {
+        setJournalEntry(e.target.value);
+    };
+
+    const handleSubmitJournal = async (e) => {
+        e.preventDefault();
+
+        const response = await fetch('/journal_entries', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                journal_entry: journalEntry, // Assuming journalEntry is the text you want to submit
+                prompt_id: randomPrompt.id, // Assuming you want to associate it with the current prompt
+            }),
+        });
+    
+        if (response.ok) {
+            // If the request is successful, add the new entry to the state
+            const newEntry = await response.json();
+            setEntries([...entries, newEntry]);
+            setJournalEntry(''); // Clear the journal entry input
+        } else {
+            // Handle the error here, e.g., display an error message to the user
+            console.error('Failed to submit journal entry');
+        }
+    };
+    
 
     const handleSearch = (e) => {
         setSearchInput(e.target.value)
@@ -41,8 +70,8 @@ export default function JournalApp({ user }) {
         <div>
             <Card className='green-center-box' key={randomPrompt.id}> 
             <h2 className='headline'> {randomPrompt.prompt} </h2>
-            <input type='text' placeholder='Enter response here'/>
-            <Button variant='secondary' type='submit'> Submit </Button>
+            <input type='text' placeholder='Enter response here' onChange={handleJournalEntryChange}/>
+            <Button variant='secondary' type='submit' onClick={handleSubmitJournal}> Submit </Button>
             </Card>
             {user ? 
              <Card className='green-right-box'> 

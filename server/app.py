@@ -149,11 +149,15 @@ class JournalEntries(Resource):
     
     def post(self): 
         # if session.get('user_id"'): 
-            data = request.get_json() 
-            new_entry = JournalEntry(journal_entry=data['journal_entry'], user_id=session['user_id'], prompt_id=data['prompt_id'])
-            db.session.add(new_entry)
-            db.session.commit()
-            return make_response(new_entry, 200)
+        data = request.get_json() 
+        new_entry = JournalEntry(
+            journal_entry=data['journal_entry'], 
+            #hardcode user id for now
+            user_id=1, 
+            prompt_id=data['prompt_id'])
+        db.session.add(new_entry)
+        db.session.commit()
+        return new_entry.to_dict(rules=('-user', '-journal_prompt.journal_entries',)), 200
         # return make_response({"Error": "Sign in to submit a journal entry."}, 404)
 api.add_resource(JournalEntries, '/journal_entries')
 
