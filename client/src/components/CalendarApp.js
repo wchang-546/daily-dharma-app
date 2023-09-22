@@ -4,7 +4,8 @@ import 'react-calendar/dist/Calendar.css';
 import Button from 'react-bootstrap/Button';
 import CalendarEntry from './CalendarEntry';
 import Card from 'react-bootstrap/Card';
-
+import CalendarChart from './CalendarChart';
+ 
 export default function CalendarApp({ user }) {
     const [date, setDate] = useState(new Date());
     const [selectedMood, setSelectedMood] = useState('Stoked');
@@ -13,7 +14,8 @@ export default function CalendarApp({ user }) {
 
     const handleSearch = (e) => {
       setSearchInput(e.target.value)
-  }
+    }
+
     useEffect(() => {
         fetch('/calendar_entries')
         .then((res) => res.json())
@@ -59,6 +61,10 @@ export default function CalendarApp({ user }) {
         }
     }
 
+    //Stretch goal: Calendar scatterplot. Work on it later. 
+    //<CalendarChart entries={entries}/>
+
+    
     return (
         <div>
             <div className='green-center-box'>
@@ -79,11 +85,13 @@ export default function CalendarApp({ user }) {
                 <Button className='green-button' onClick={handleSubmitCalendar}> Enter Mood </Button>
             </div>
             {user ? 
+            <div>
              <Card className='green-right-box'> 
                 <h3 className='headline'> Past Entries </h3>
                 <input placeholder='Search' onChange={handleSearch}/>
                 {entriesToDisplay}
-            </Card> : null}
+            </Card> 
+             </div> : null}
         </div>
     );
 }

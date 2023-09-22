@@ -18,6 +18,14 @@
   transform: translate(-50%, -50%);
 }
 
+.lower-box { 
+  background-color: #b3e4b9;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .right-box { 
   position: absolute;
   top: 40%;
