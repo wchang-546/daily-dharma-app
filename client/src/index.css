@@ -25,6 +25,11 @@
   left: 80%;
 }
 
+.green-box { 
+  background-color: #217969;
+}
+
+
 .green-center-box { 
   background-color: #217969;
   position: absolute;
@@ -221,7 +226,7 @@
 }
 
 .headline { 
-  color: #ffffff;
+  color: #dbd6d6;
   font-family: 'Merriweather', serif; 
   font-size: 30px; 
   font-weight: 300; 
@@ -241,6 +246,16 @@
   text-shadow: #2a8d7b -1px -1px; }
 
 .manage-account-font-small { 
+  color: #ffffff;
+  font-family: 'Merriweather', serif; 
+  font-size: 20px; 
+  font-weight: 300; 
+  line-height: 40px; 
+  margin: 0 30px 40px; 
+  text-align: center; 
+  text-shadow: #2a8d7b -1px -1px; }
+
+.journal-font { 
   color: #ffffff;
   font-family: 'Merriweather', serif; 
   font-size: 20px; 

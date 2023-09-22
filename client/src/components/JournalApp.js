@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import JournalEntry from './JournalEntry';
 
 export default function JournalApp({ user }) { 
     const [randomPrompt, setRandomPrompt] = useState([]); 
@@ -8,35 +9,32 @@ export default function JournalApp({ user }) {
     const [searchInput, setSearchInput] = useState("");
 
     useEffect(() => {
-        fetch("http://localhost:3000/prompts")
+        fetch('/prompts')
             .then((res) => res.json())
             .then((data) => {
                 const randomIndex = Math.floor(Math.random() * data.length);
                 setRandomPrompt(data[randomIndex]);
             })
+        fetch('/journal_entries')
+        .then((res) => res.json())
+        .then((data) => {
+            setEntries(data)
+        })
     }, [])
 
-    //Write code to set entries state to entries that match the session user_id 
 
     const handleSearch = (e) => {
-        console.log(e.target.value);
         setSearchInput(e.target.value)
     }
 
     const filteredEntries = entries.filter((entry) => {
-        return entry.name
+        return entry.journal_entry 
           .toLowerCase()
           .includes(searchInput.toLowerCase());
       });
     
-    //Fix code here to display user_id
     const entriesToDisplay = filteredEntries.map((entry) => {
-        if (entry.id === 'user_id') {
-            return (<div>
-                        <h1> {entry.prompt} </h1>
-                        <h2> {entry.journal_entry} </h2>
-                    </div> )
-        }
+            return (<JournalEntry key={entry.id} entry={entry}/>)
     })
 
     return ( 
@@ -50,6 +48,7 @@ export default function JournalApp({ user }) {
              <Card className='green-right-box'> 
                 <h3 className='headline'> Past Entries </h3>
                 <input placeholder='Search' onChange={handleSearch}/>
+                {entriesToDisplay}
             </Card> : null}
    
         </div>

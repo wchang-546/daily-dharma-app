@@ -141,21 +141,20 @@ api.add_resource(CalendarEntriesById, '/calendar_entries/<int:id>')
 
 class JournalEntries(Resource): 
     def get(self): 
-        if session.get('user_id"'):
-            entries = [entry.to_dict(rules=('-user','-journal_prompt.journal_entries')) for entry in JournalEntry.query.filter(JournalEntry.id == session['user_id']).all()]
-            return make_response(entries, 200)
-        else: 
-            return make_response({"Error": "You must log in to view past entries"}, 200)
+        # if session.get('user_id"'):
+        entries = [entry.to_dict(rules=('-user','-journal_prompt.journal_entries')) for entry in JournalEntry.query.all()]
+        return entries, 200
+        # else: 
+        #     return make_response({"Error": "You must log in to view past entries"}, 200)
     
     def post(self): 
-        if session.get('user_id"'): 
+        # if session.get('user_id"'): 
             data = request.get_json() 
-            #Check this session['user_id'] and keys for journal_entry and prompt_id
             new_entry = JournalEntry(journal_entry=data['journal_entry'], user_id=session['user_id'], prompt_id=data['prompt_id'])
             db.session.add(new_entry)
             db.session.commit()
             return make_response(new_entry, 200)
-        return make_response({"Error": "Sign in to submit a journal entry."}, 404)
+        # return make_response({"Error": "Sign in to submit a journal entry."}, 404)
 api.add_resource(JournalEntries, '/journal_entries')
 
 class JournalEntriesById(Resource):
