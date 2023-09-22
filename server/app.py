@@ -72,9 +72,8 @@ class UsersById(Resource):
         username = data['username']
         old_password = data['old_password']
         new_password = data['new_password']
-        user = User.query.filter(User.id == id).first()
-        #If Flask session wasn't broken, I would use "if session.get('user_id)"
-        if user: 
+        if session.get('user_id'):
+            user = User.query.filter(User.id == session['user_id']).first()
             if user and user.authenticate(old_password): 
                 user.username = username 
                 user.password_hash = new_password
@@ -91,20 +90,19 @@ api.add_resource(JournalPrompts, '/prompts')
 
 class CalendarEntries(Resource):
     def get(self): 
-        # if session.get('user_id'): 
-        entries = [entry.to_dict(rules=('-user',)) for entry in CalendarEntry.query.all()]
-        return entries, 200
+        if session.get('user_id'): 
+            entries = [entry.to_dict(rules=('-user',)) for entry in CalendarEntry.query.all()]
+            return entries, 200
+        return {"Error": "Unauthorized"}, 404
     
     def post(self): 
-        # if session.get('user_id'): 
-        data = request.get_json() 
-        #Check this session['user_id']
-        #Hardcode user_id for now
-        new_entry = CalendarEntry(mood=data['mood'], user_id=1)
-        db.session.add(new_entry)
-        db.session.commit()
-        return new_entry.to_dict(), 200
-        # return make_response({"Error": "Sign in to submit a calendar entry."}, 404)
+        if session.get('user_id'): 
+            data = request.get_json() 
+            new_entry = CalendarEntry(mood=data['mood'], user_id=session['user_id'])
+            db.session.add(new_entry)
+            db.session.commit()
+            return new_entry.to_dict(), 200
+        return {"Error": "Sign in to submit a calendar entry."}, 404
 api.add_resource(CalendarEntries, '/calendar_entries')
 
 class CalendarEntriesById(Resource): 
@@ -112,9 +110,8 @@ class CalendarEntriesById(Resource):
         if session.get('user_id'): 
             entry = CalendarEntry.query.filter(CalendarEntry.id == id).one_or_none()
             if entry is None:
-                return make_response({"Error": "Calendary entry not found"}, 404)
-        #ERROR: figure out serialization rule here
-            return make_response(entry.to_dict(rules=('-user',)), 200)
+                return {"Error": "Calendary entry not found"}, 404
+            return entry.to_dict(rules=('-user',)), 200
         return {'error': '401 Unauthorized'}, 401
     
     def patch(self, id): 
@@ -125,7 +122,7 @@ class CalendarEntriesById(Resource):
                 for key in data: 
                     setattr(entry, key, data[key])      
                 return make_response(entry.to_dict(rules=('-user',)), 202)
-            return make_response({"Error": "Calendar entry unable to be edited."}, 404)
+            return {"Error": "Calendar entry unable to be edited."}, 404
         return {'error': '401 Unauthorized'}, 401
     
     def delete(self, id): 
@@ -135,38 +132,37 @@ class CalendarEntriesById(Resource):
                 db.session.delete(entry)
                 db.session.commit()
                 return make_response({}, 204)
-            return make_response({"Error": "Calendar entry not found"}, 404)
+            return {"Error": "Calendar entry not found"}, 404
         return {'error': '401 Unauthorized'}, 401
 api.add_resource(CalendarEntriesById, '/calendar_entries/<int:id>')
 
 class JournalEntries(Resource): 
     def get(self): 
-        # if session.get('user_id"'):
-        entries = [entry.to_dict(rules=('-user','-journal_prompt.journal_entries')) for entry in JournalEntry.query.all()]
-        return entries, 200
-        # else: 
-        #     return make_response({"Error": "You must log in to view past entries"}, 200)
+        if session.get('user_id"'):
+            entries = [entry.to_dict(rules=('-user','-journal_prompt.journal_entries')) for entry in JournalEntry.query.filter(JournalEntry.id == session['user_id']).first()]
+            return entries, 200
+        else: 
+            return {"Error": "You must log in to view past entries"}, 200
     
     def post(self): 
-        # if session.get('user_id"'): 
-        data = request.get_json() 
-        new_entry = JournalEntry(
-            journal_entry=data['journal_entry'], 
-            #hardcode user id for now
-            user_id=1, 
-            prompt_id=data['prompt_id'])
-        db.session.add(new_entry)
-        db.session.commit()
-        return new_entry.to_dict(rules=('-user', '-journal_prompt.journal_entries',)), 200
-        # return make_response({"Error": "Sign in to submit a journal entry."}, 404)
+        if session.get('user_id"'): 
+            data = request.get_json() 
+            new_entry = JournalEntry(
+                journal_entry=data['journal_entry'], 
+                user_id=session['user_id'], 
+                prompt_id=data['prompt_id'])
+            db.session.add(new_entry)
+            db.session.commit()
+            return new_entry.to_dict(rules=('-user', '-journal_prompt.journal_entries',)), 200
+        return {"Error": "Sign in to submit a journal entry."}, 404
 api.add_resource(JournalEntries, '/journal_entries')
 
 class JournalEntriesById(Resource):
     def get(self, id): 
         entry = JournalEntry.query.filter(JournalEntry.id == id) 
         if entry is None: 
-            return make_response({"Error": "Journal entry not found"}, 404)
-        return make_response(entry.to_dict(rules=('-user.journal_entries', '-journal_prompt.journal_entries')), 200)
+            return {"Error": "Journal entry not found"}, 404
+        return entry.to_dict(rules=('-user.journal_entries', '-journal_prompt.journal_entries')), 200
    
     def patch(self, id): 
         entry = JournalEntry.query.filter(JournalEntry.id == id)
@@ -174,15 +170,15 @@ class JournalEntriesById(Resource):
             data = request.get_json() 
             for key in data: 
                 setattr(entry, key, data[key])      
-        return make_response({"Error": "Journal entry unable to be edited."}, 404)
+        return {"Error": "Journal entry unable to be edited."}, 404
  
     def delete(self, id): 
         entry = JournalEntry.query.filter(JournalEntry.id == id)
         if entry: 
             db.session.delete(entry)
             db.session.commit()
-            return make_response({}, 204)
-        return make_response({"Error": "Journal entry not found"}, 404)
+            return {}, 204
+        return {"Error": "Journal entry not found"}, 404
 api.add_resource(JournalEntriesById, '/journal_entries/<int:id>')
 
 if __name__ == '__main__':
