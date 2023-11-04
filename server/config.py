@@ -14,8 +14,14 @@ from flask_session import Session
 
 # Instantiate app, set attributes
 app = Flask(__name__)
-app.secret_key= b'\xef>\xc3r6\x85j\x82\xfbg@\xdfz\xca\xea\xc6'
+# Instantiate CORS
+CORS(app, origins=['http://localhost:3000'], supports_credentials=True)
+
+app.secret_key= '\xef>\xc3r6\x85j\x82\xfbg@\xdfz\xca\xea\xc6'
 app.config['SECRET_KEY'] = '\xef>\xc3r6\x85j\x82\xfbg@\xdfz\xca\xea\xc6'
+
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -25,10 +31,6 @@ app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = 'None'
 
 app.json.compact = False
-
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
-
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={
@@ -45,5 +47,3 @@ bcrypt = Bcrypt(app)
 # Instantiate REST API
 api = Api(app)
 
-# # Instantiate CORS
-CORS(app, origins=['http://localhost:3000'], supports_credentials=True)

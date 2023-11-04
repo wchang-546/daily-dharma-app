@@ -57,15 +57,7 @@ class CheckSession(Resource):
             return user.to_dict(), 200
         return {}, 204
 api.add_resource(CheckSession, '/check_session')
-
-class Users(Resource): 
-    def get(self): 
-        if session.get('user_id'):
-             user = User.query.filter(User.id == session['user_id']).one_or_none()
-             return make_response(user.to_dict(), 200)
-        return {'error': '401 Unauthorized'}, 401
-api.add_resource(Users, '/users')
-
+ 
 class UsersById(Resource): 
     def patch(self, id): 
         data = request.get_json()
